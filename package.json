@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "prettier": "prettier --write .",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint"
@@ -24,12 +25,13 @@
     "@vue/cli-service": "~5.0.0",
     "@vue/eslint-config-typescript": "^9.1.0",
     "eslint": "^7.32.0",
-    "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-config-prettier": "^8.10.0",
+    "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-vue": "^8.0.3",
     "less": "^4.0.0",
     "less-loader": "^8.0.0",
-    "prettier": "^2.4.1",
+    "prettier": "^2.8.8",
+    "prettier-eslint": "^16.2.0",
     "typescript": "~4.5.5"
   },
   "eslintConfig": {
@@ -41,6 +43,8 @@
       "plugin:vue/vue3-essential",
       "eslint:recommended",
       "@vue/typescript/recommended",
+      "plugin:prettier/recommended",
+      "@vue/prettier/@typescript-eslint",
       "plugin:prettier/recommended"
     ],
     "parserOptions": {
