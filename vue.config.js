@@ -9,7 +9,8 @@ module.exports = defineConfig({
         '@': path.resolve(__dirname, 'src'),
         components: '@/components',
         api: '@/api',
-        utils: '@/utils'
+        utils: '@/utils',
+        views: '@/views'
       }
     }
   }
