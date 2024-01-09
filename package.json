@@ -6,7 +6,8 @@
     "prettier": "prettier --write .",
     "lint": "vue-cli-service lint",
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build"
+    "build": "vue-cli-service build",
+    "prepare": "husky install"
   },
   "dependencies": {
     "core-js": "^3.8.3",
@@ -34,7 +35,8 @@
     "less-loader": "^8.0.0",
     "prettier": "^2.8.8",
     "prettier-eslint": "^16.2.0",
-    "typescript": "~4.5.5"
+    "typescript": "~4.5.5",
+    "husky": "^8.0.0"
   },
   "browserslist": [
     "> 1%",
