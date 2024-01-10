@@ -2,22 +2,27 @@ import Request from '@/service/request'
 import { baseURL, timeout } from './request/config'
 
 
-const request = new Request({
+const network = new Request({
   baseURL,
   timeout,
-  interceptors: {
-    requestInterceptors: config => {
-      return config
-    },
-    requestInterceptorsCatch: error => {
-      return error
-    },
-    responseInterceptors: res => {
-      return res
-    },
-    responseInterceptorsCatch: error => {
-      return error
-    }
-  }
+  // interceptors: {
+  //   requestInterceptors: config => {
+  //
+  //     const token = ''
+  //     if(token){
+  //       config.headers.Authorization = `Bearer ${token}`
+  //     }
+  //     return config
+  //   },
+  //   requestInterceptorsCatch: error => {
+  //     return error
+  //   },
+  //   responseInterceptors: res => {
+  //     return res.data
+  //   },
+  //   responseInterceptorsCatch: error => {
+  //     return error
+  //   }
+  // }
 })
-export default request
+export default network
