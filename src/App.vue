@@ -1,6 +1,8 @@
 <template>
   <el-config-provider :locale="locale">
-    <router-view></router-view>
+    <div class="app">
+      <router-view></router-view>
+    </div>
   </el-config-provider>
 </template>
 
@@ -12,4 +14,8 @@ import { reactive } from 'vue'
 const locale = reactive(zhCn)
 </script>
 
-<style lang="less"></style>
+<style lang="less">
+.app {
+  height: 100%;
+}
+</style>
