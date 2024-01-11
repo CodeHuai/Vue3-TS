@@ -2,6 +2,7 @@ import axios from 'axios'
 import type { AxiosInstance } from 'axios'
 import type { RequestInterceptors, RequestConfig } from './type'
 import { ElLoading } from 'element-plus'
+import cache from '@/utils/cache'
 
 const DEFAULT_LOADING_STATE = true // loading 的默认状态
 
@@ -29,6 +30,10 @@ class Request {
 
     //   所有实例都添加 拦截器
     this.instance.interceptors.request.use(config => {
+        // 添加 token
+        const token = cache.getCache('token')
+        config.headers.Authorization = `Bearer ${token}`
+
         if (this.showLoading) {
           this.loading = ElLoading.service({
             lock: true,
@@ -58,9 +63,9 @@ class Request {
       })
   }
 
-  request(config: RequestConfig) {
+  request<T>(config: RequestConfig): Promise<T> {
     return new Promise((resolve, reject) => {
-      this.instance.request(config).then(res => {
+      this.instance.request<any, T>(config).then(res => {
         resolve(res)
       }).catch(error => {
         reject(error)
@@ -68,6 +73,22 @@ class Request {
         this.showLoading = DEFAULT_LOADING_STATE // 还原默认值
       })
     })
+  }
+
+  get<T>(config: RequestConfig) {
+    return this.request<T>({ ...config, method: 'get' })
+  }
+
+  post<T>(config: RequestConfig) {
+    return this.request<T>({ ...config, method: 'post' })
+  }
+
+  delete<T>(config: RequestConfig) {
+    return this.request<T>({ ...config, method: 'delete' })
+  }
+
+  put<T>(config: RequestConfig) {
+    return this.request<T>({ ...config, method: 'put' })
   }
 }
 

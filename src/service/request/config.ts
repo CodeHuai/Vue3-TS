@@ -2,7 +2,7 @@ let baseURL = ''
 let timeout = 1000 * 3
 
 if (process.env.NODE_ENV === 'development') {
-  baseURL = 'http://codercba.com:5000/'
+  baseURL = '/api'
   timeout = 3 * 1000
 } else if (process.env.NODE_ENV === 'production') {
   baseURL = 'http://codercba.com:5000/'

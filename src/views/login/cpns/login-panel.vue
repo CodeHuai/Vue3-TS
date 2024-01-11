@@ -6,35 +6,42 @@ import { TabPaneName } from 'element-plus'
 
 // 记住密码
 const isKeepPassword = ref(false)
+const activeName = ref('ACCOUNT')
 const accountRef = ref<InstanceType<typeof loginAccount>>(null)
 const loginPhoneRef = ref<InstanceType<typeof loginPhone>>(null)
 
 // 立即登陆
 const handleLoginClick = () => {
-  accountRef.value?.loginAction(isKeepPassword.value)
+  if(activeName.value === 'ACCOUNT'){
+    accountRef.value?.loginAction(isKeepPassword.value)
+  }
+  if(activeName.value === 'PHONE'){
+    loginPhoneRef.value?.loginAction()
+  }
 }
 
 
-const tabChange = (name: TabPaneName) => {
-  if (Number(name)) {
+const tabChange = (name: string) => {
+  if (name === 'PHONE') {
     loginPhoneRef.value?.reset()
   } else {
     accountRef.value?.reset()
   }
+  activeName.value = name
 }
 </script>
 
 <template>
   <div class="login-panel">
     <h1 class="title">后台管理系统</h1>
-    <el-tabs type="border-card" stretch @tab-change="tabChange">
-      <el-tab-pane>
+    <el-tabs type="border-card" stretch @tab-change="tabChange" v-model="activeName">
+      <el-tab-pane name="ACCOUNT">
         <template #label>
           <span><i class="el-icon-user-solid"></i> 账号登录</span>
         </template>
         <login-account ref="accountRef" />
       </el-tab-pane>
-      <el-tab-pane>
+      <el-tab-pane name="PHONE">
         <template #label>
           <span><i class="el-icon-mobile-phone"></i> 手机登录</span>
         </template>
@@ -43,7 +50,7 @@ const tabChange = (name: TabPaneName) => {
     </el-tabs>
 
     <div class="account-control">
-      <el-checkbox v-model="isKeepPassword">记住密码</el-checkbox>
+      <el-checkbox v-model="isKeepPassword" :disabled="activeName !== 'ACCOUNT'">记住密码</el-checkbox>
       <el-link type="primary">忘记密码</el-link>
     </div>
 

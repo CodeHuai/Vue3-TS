@@ -4,6 +4,17 @@ const path = require('path')
 module.exports = defineConfig({
   publicPath: './', // 部署时候要看具体的路径
   transpileDependencies: true,
+  devServer: {
+    proxy: {
+      '^/api': {
+        target: 'http://codercba.com:5000',
+        pathRewrite: {
+          '^/api': ''
+        },
+        changeOrigin: true
+      }
+    }
+  },
   configureWebpack: {
     resolve: {
       alias: {

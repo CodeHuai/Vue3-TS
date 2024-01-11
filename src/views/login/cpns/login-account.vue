@@ -3,7 +3,9 @@ import { reactive, ref, onMounted } from 'vue'
 import { rules } from '../config/account-config'
 import { ElForm } from 'element-plus'
 import localCache from '@/utils/cache'
+import { useStore } from 'vuex'
 
+const store = useStore()
 const formRef = ref<InstanceType<typeof ElForm>>()
 const account = reactive({
   name: '',
@@ -22,6 +24,8 @@ const loginAction = (isKeepPassword: boolean) => {
         localCache.deleteCache('name')
         localCache.deleteCache('password')
       }
+
+      store.dispatch('loginModule/accountLoginAction', {...account})
     }
   })
 }
@@ -45,10 +49,10 @@ defineExpose({
   <div class="login-account">
     <el-form label-width="60px" :rules="rules" :model="account" ref="formRef">
       <el-form-item label="账号" prop="name">
-        <el-input v-model="account.name" />
+        <el-input clearable v-model="account.name" />
       </el-form-item>
       <el-form-item label="密码" prop="password">
-        <el-input v-model="account.password" show-password />
+        <el-input clearable v-model="account.password" show-password />
       </el-form-item>
     </el-form>
   </div>
