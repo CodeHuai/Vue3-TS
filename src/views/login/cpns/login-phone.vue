@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, reactive, defineExpose } from 'vue'
+import { onMounted, reactive } from 'vue'
 
 const phone = reactive({
   num: '',

@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { reactive, ref, defineExpose, onMounted } from 'vue'
-import {rules} from '../config/account-config'
+import { reactive, ref, onMounted } from 'vue'
+import { rules } from '../config/account-config'
 import { ElForm } from 'element-plus'
+import localCache from '@/utils/cache'
 
 const formRef = ref<InstanceType<typeof ElForm>>()
 const account = reactive({
@@ -9,10 +10,18 @@ const account = reactive({
   password: ''
 })
 
-const loginAction = () => {
+const loginAction = (isKeepPassword: boolean) => {
   formRef.value?.validate(valid => {
-    if(valid){
-      console.log(valid)
+    if (valid) {
+      if (isKeepPassword) {
+        //   记住了密码
+        localCache.setCache('name', account.name)
+        localCache.setCache('password', account.password)
+      } else {
+        //   没有记住密码
+        localCache.deleteCache('name')
+        localCache.deleteCache('password')
+      }
     }
   })
 }
@@ -39,7 +48,7 @@ defineExpose({
         <el-input v-model="account.name" />
       </el-form-item>
       <el-form-item label="密码" prop="password">
-        <el-input v-model="account.password" />
+        <el-input v-model="account.password" show-password />
       </el-form-item>
     </el-form>
   </div>

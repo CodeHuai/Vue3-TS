@@ -1,29 +1,27 @@
 <script setup lang="ts">
 import loginPhone from './login-phone.vue'
 import loginAccount from './login-account.vue'
-import { ref,  nextTick } from 'vue'
+import { ref } from 'vue'
 import { TabPaneName } from 'element-plus'
 
 // 记住密码
-const isKeepPassword = ref(true)
+const isKeepPassword = ref(false)
 const accountRef = ref<InstanceType<typeof loginAccount>>(null)
 const loginPhoneRef = ref<InstanceType<typeof loginPhone>>(null)
 
 // 立即登陆
 const handleLoginClick = () => {
-  nextTick(() => {
-    accountRef.value?.loginAction()
-  })
+  accountRef.value?.loginAction(isKeepPassword.value)
 }
 
+
 const tabChange = (name: TabPaneName) => {
-  if(Number(name)){
+  if (Number(name)) {
     loginPhoneRef.value?.reset()
   } else {
     accountRef.value?.reset()
   }
 }
-
 </script>
 
 <template>
