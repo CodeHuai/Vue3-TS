@@ -19,6 +19,9 @@ const loginModule: Module<ILoginState, IRootState> = {
   getters: {
     getUserMenus(state) {
       return state.userMenus || cache.getCache('userMenus')
+    },
+    getUserInfo(state){
+      return state.userInfo
     }
   },
   actions: {
