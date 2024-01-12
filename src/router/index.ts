@@ -1,4 +1,4 @@
-import { createRouter, RouteRecordRaw , createWebHashHistory} from 'vue-router'
+import { createRouter, RouteRecordRaw, createWebHashHistory } from 'vue-router'
 import cache from '@/utils/cache'
 
 const routes: Array<RouteRecordRaw> = [
@@ -8,11 +8,18 @@ const routes: Array<RouteRecordRaw> = [
   },
   {
     path: '/login',
+    name:'login',
     component: () => import('@/views/login/login.vue')
   },
   {
     path: '/main',
+    name:'main',
     component: () => import('@/views/main/main.vue')
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'notFound',
+    component: () => import('@/views/not-found/not-found.vue')
   }
 ]
 

@@ -4,6 +4,7 @@ import type { IRootState } from '../types'
 import { fetchLoginByAccount, requestUserInfoById, requestUserMenusByRoleId } from '@/service/login/index'
 import cache from '@/utils/cache'
 import router from '@/router'
+import { mapMenusToRoutes } from '@/utils/map-menus'
 
 
 const loginModule: Module<ILoginState, IRootState> = {
@@ -16,7 +17,7 @@ const loginModule: Module<ILoginState, IRootState> = {
     }
   },
   getters: {
-    getUserMenus(state){
+    getUserMenus(state) {
       return state.userMenus || cache.getCache('userMenus')
     }
   },
@@ -73,9 +74,14 @@ const loginModule: Module<ILoginState, IRootState> = {
       state.userInfo = value
       cache.setCache('userInfo', value)
     },
-    changeUserMenus(state, value){
+    changeUserMenus(state, value) {
       state.userMenus = value
       cache.setCache('userMenus', value)
+
+      const routes = mapMenusToRoutes(value)
+      routes.forEach((route) => {
+        router.addRoute('main', route)
+      })
     }
   }
 }

@@ -2,10 +2,20 @@
 import { useStore } from 'vuex'
 import { computed } from 'vue'
 import { randomCreateIcon } from '@/config/index'
+import { useRouter } from 'vue-router'
+import type {IRouterBaseType} from './types'
 
+const router = useRouter()
 const props = defineProps(['collapse'])
 const store = useStore()
 const userMenus = computed(() => store.getters['loginModule/getUserMenus']) || [] // 路由菜单
+
+// 点击菜单跳转逻辑
+const handleMenuItemClick = (routeInfo: IRouterBaseType) => {
+  router.push({
+    path: routeInfo.url ?? '/not-found'
+  })
+}
 
 </script>
 
@@ -31,7 +41,7 @@ const userMenus = computed(() => store.getters['loginModule/getUserMenus']) || [
               <span>{{ item.name }}</span>
             </template>
             <template v-for="child in item.children" :key="child.id">
-              <el-menu-item :index="String(child.sort)">
+              <el-menu-item :index="String(child.sort)" @click="handleMenuItemClick(child)">
                 <component v-if="child.icon" :is="randomCreateIcon()" class="icon-class"></component>
                 <span>{{ child.name }}</span>
               </el-menu-item>
@@ -40,7 +50,7 @@ const userMenus = computed(() => store.getters['loginModule/getUserMenus']) || [
         </template>
         <!--        一级菜单-->
         <template v-if="item.type === 2">
-          <el-menu-item :index="String(item.sort)">
+          <el-menu-item :index="String(item.sort)" @click="handleMenuItemClick(item)">
             <component v-if="item.icon" :is="randomCreateIcon()" class="icon-class"></component>
             <span>{{ item.name }}</span>
           </el-menu-item>

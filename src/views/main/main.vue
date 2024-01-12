@@ -19,7 +19,13 @@ const handleFoldChange = (status:boolean) => {
         <el-header class="page-header">
           <nav-header @foldChange="handleFoldChange" />
         </el-header>
-        <el-main class="page-content">Main</el-main>
+        <el-main class="page-content">
+          <router-view v-slot="{Component}">
+            <transition>
+              <component :is="Component" class="animate__zoomIn animate__animated"></component>
+            </transition>
+          </router-view>
+        </el-main>
       </el-container>
     </el-container>
   </div>
