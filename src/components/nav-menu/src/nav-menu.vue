@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useStore } from 'vuex'
 import { computed } from 'vue'
+import { randomCreateIcon } from '@/config/index'
 
 const props = defineProps(['collapse'])
 const store = useStore()
@@ -15,7 +16,7 @@ const userMenus = computed(() => store.getters['loginModule/getUserMenus']) || [
       <span v-if="!props.collapse" class="title">Vue3+TS</span>
     </div>
     <el-menu
-      default-active="2"
+      :collapse="props.collapse"
       class="el-menu-vertical"
       background-color="#0c2135"
       text-color="#b7bdc3"
@@ -26,12 +27,12 @@ const userMenus = computed(() => store.getters['loginModule/getUserMenus']) || [
         <template v-if="item.type === 1">
           <el-sub-menu :index="String(item.sort)">
             <template #title>
-              <i v-if="item.icon" :class="item.icon"></i>
+              <component v-if="item.icon" :is="randomCreateIcon()" class="icon-class"></component>
               <span>{{ item.name }}</span>
             </template>
             <template v-for="child in item.children" :key="child.id">
               <el-menu-item :index="String(child.sort)">
-                <i v-if="child.icon" :class="child.icon"></i>
+                <component v-if="child.icon" :is="randomCreateIcon()" class="icon-class"></component>
                 <span>{{ child.name }}</span>
               </el-menu-item>
             </template>
@@ -40,7 +41,7 @@ const userMenus = computed(() => store.getters['loginModule/getUserMenus']) || [
         <!--        一级菜单-->
         <template v-if="item.type === 2">
           <el-menu-item :index="String(item.sort)">
-            <i v-if="item.icon" :class="item.icon"></i>
+            <component v-if="item.icon" :is="randomCreateIcon()" class="icon-class"></component>
             <span>{{ item.name }}</span>
           </el-menu-item>
         </template>
@@ -50,6 +51,11 @@ const userMenus = computed(() => store.getters['loginModule/getUserMenus']) || [
 </template>
 
 <style scoped lang="less">
+.icon-class {
+  width: 20px;
+  margin-right: 10px;
+}
+
 .nav-menu {
   height: 100%;
   background-color: #001529;

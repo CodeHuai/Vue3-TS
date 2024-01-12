@@ -4,6 +4,9 @@ import NavMenu from '@/components/nav-menu'
 import NavHeader from '@/components/nav-header'
 
 const isCollapse = ref(false)
+const handleFoldChange = (status:boolean) => {
+  isCollapse.value = status
+}
 </script>
 
 <template>
@@ -14,7 +17,7 @@ const isCollapse = ref(false)
       </el-aside>
       <el-container class="page">
         <el-header class="page-header">
-          <nav-header />
+          <nav-header @foldChange="handleFoldChange" />
         </el-header>
         <el-main class="page-content">Main</el-main>
       </el-container>
