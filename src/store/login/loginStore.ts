@@ -15,7 +15,11 @@ const loginModule: Module<ILoginState, IRootState> = {
       userMenus: []
     }
   },
-  getters: {},
+  getters: {
+    getUserMenus(state){
+      return state.userMenus || cache.getCache('userMenus')
+    }
+  },
   actions: {
     async accountLoginAction({ commit }, payload) {
       try {

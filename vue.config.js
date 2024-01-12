@@ -16,6 +16,7 @@ module.exports = defineConfig({
     }
   },
   configureWebpack: {
+    devtool: 'source-map',
     resolve: {
       alias: {
         '@': path.resolve(__dirname, 'src'),
@@ -24,7 +25,7 @@ module.exports = defineConfig({
         utils: '@/utils',
         views: '@/views'
       }
-    }
+    },
   },
   chainWebpack: (config) => {
     config.plugin('define').tap((definitions) => {

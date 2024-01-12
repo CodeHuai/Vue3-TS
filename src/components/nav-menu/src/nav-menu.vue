@@ -1,5 +1,10 @@
 <script setup lang="ts">
+import { useStore } from 'vuex'
+import { computed } from 'vue'
+
 const props = defineProps(['collapse'])
+const store = useStore()
+const userMenus = computed(() => store.getters['loginModule/getUserMenus']) || [] // 路由菜单
 
 </script>
 
@@ -16,6 +21,30 @@ const props = defineProps(['collapse'])
       text-color="#b7bdc3"
       active-text-color="#0a60bd"
     >
+      <template v-for="item in userMenus" :key="item.id">
+        <!--        二级菜单-->
+        <template v-if="item.type === 1">
+          <el-sub-menu :index="String(item.sort)">
+            <template #title>
+              <i v-if="item.icon" :class="item.icon"></i>
+              <span>{{ item.name }}</span>
+            </template>
+            <template v-for="child in item.children" :key="child.id">
+              <el-menu-item :index="String(child.sort)">
+                <i v-if="child.icon" :class="child.icon"></i>
+                <span>{{ child.name }}</span>
+              </el-menu-item>
+            </template>
+          </el-sub-menu>
+        </template>
+        <!--        一级菜单-->
+        <template v-if="item.type === 2">
+          <el-menu-item :index="String(item.sort)">
+            <i v-if="item.icon" :class="item.icon"></i>
+            <span>{{ item.name }}</span>
+          </el-menu-item>
+        </template>
+      </template>
     </el-menu>
   </div>
 </template>
@@ -27,11 +56,19 @@ const props = defineProps(['collapse'])
 
   .logo {
     display: flex;
-    height: 28px;
+    height: 48px;
+    line-height: 48px;
     padding: 12px 10px 8px 10px;
     flex-direction: row;
     justify-content: flex-start;
     align-items: center;
+    position: sticky;
+    top: 0;
+    left: 0;
+    z-index: 999;
+    background: #001529;
+    overflow: hidden;
+    box-sizing: border-box;
 
     .img {
       height: 100%;
@@ -59,7 +96,7 @@ const props = defineProps(['collapse'])
     }
   }
 
-  ::v-deep .el-submenu__title {
+  :deep(.el-submenu__title) {
     background-color: #001529 !important;
   }
 

@@ -12,6 +12,7 @@ export interface IRootRouterType extends IRouterBaseType {
   children?: Array<IRouterBaseType> | null
 }
 
+
 export interface ILoginState {
   token: string
   userInfo: any
