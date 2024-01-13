@@ -11,6 +11,8 @@ const breadcrumbs = computed(() => store.getters['breadCrumbModule/getBreadCrumb
 onMounted(() => {
   store.commit('breadCrumbModule/changeBreadCrumbData', { menus: userMenus.value, route: route.path })
 })
+
+
 </script>
 
 <template>
