@@ -1,13 +1,21 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import UserInfo from '@/components/nav-header/src/user-info.vue'
+import Breadcrumb from '@/base-ui/breadcrumb'
+import { getBreadcrumbData } from '@/utils/map-menus'
+import { useStore } from 'vuex'
+import { useRoute } from 'vue-router'
+import { IBreadcrumb } from '@/base-ui/breadcrumb/types/index'
 
+const store = useStore()
+const route = useRoute()
 const isFold = ref(false)
 const emits = defineEmits(['foldChange'])
 const handleFoldClick = () => {
   isFold.value = !isFold.value
   emits('foldChange', isFold.value)
 }
+
 </script>
 
 <template>
@@ -17,7 +25,7 @@ const handleFoldClick = () => {
       <Fold v-else />
     </el-icon>
     <div class="content">
-      <div>面包屑</div>
+      <Breadcrumb></Breadcrumb>
       <user-info />
     </div>
   </div>

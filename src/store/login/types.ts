@@ -6,6 +6,7 @@ export interface IRouterBaseType {
   icon: string
   sort: number
   parentId?: number
+  path: string
 }
 
 export interface IRootRouterType extends IRouterBaseType {

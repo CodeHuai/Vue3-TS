@@ -2,6 +2,7 @@ import { createStore } from 'vuex'
 import { IRootState } from './types'
 
 import loginModule from './login/loginStore'
+import { breadCrumbModule } from '@/store/breadcrumb/breadcrumbStore'
 
 export default createStore<IRootState>({
   state: () => {
@@ -14,6 +15,7 @@ export default createStore<IRootState>({
   mutations: {},
   actions: {},
   modules: {
-    loginModule
+    loginModule,
+    breadCrumbModule
   }
 })

@@ -22,7 +22,7 @@ const handleFoldChange = (status:boolean) => {
         <el-main class="page-content">
           <router-view v-slot="{Component}">
             <transition>
-              <component :is="Component" class="animate__zoomIn animate__animated page-center"></component>
+              <component :is="Component" class="animate__fadeInDown animate__animated page-center"></component>
             </transition>
           </router-view>
         </el-main>

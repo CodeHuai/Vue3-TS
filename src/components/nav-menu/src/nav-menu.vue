@@ -4,8 +4,9 @@ import { computed, ref } from 'vue'
 import { randomCreateIcon } from '@/config/index'
 import { useRouter, useRoute } from 'vue-router'
 import type { IRouterBaseType } from './types'
-import { firstMenu } from '@/utils/map-menus'
 import { pathMapToMenu } from '@/utils/map-menus'
+import { getBreadcrumbData } from '@/utils/map-menus'
+import { breadCrumbModule } from '@/store/breadcrumb/breadcrumbStore'
 
 const router = useRouter()
 const route = useRoute()
@@ -15,6 +16,7 @@ const userMenus = computed(() => store.getters['loginModule/getUserMenus']) || [
 
 // 点击菜单跳转逻辑
 const handleMenuItemClick = (routeInfo: IRouterBaseType) => {
+  store.commit('breadCrumbModule/changeBreadCrumbData', { menus: userMenus.value, route: routeInfo.url })
   router.push({
     path: routeInfo.url ?? '/not-found'
   })
