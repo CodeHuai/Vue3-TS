@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import { useStore } from 'vuex'
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { randomCreateIcon } from '@/config/index'
-import { useRouter } from 'vue-router'
-import type {IRouterBaseType} from './types'
+import { useRouter, useRoute } from 'vue-router'
+import type { IRouterBaseType } from './types'
+import { firstMenu } from '@/utils/map-menus'
+import { pathMapToMenu } from '@/utils/map-menus'
 
 const router = useRouter()
+const route = useRoute()
 const props = defineProps(['collapse'])
 const store = useStore()
 const userMenus = computed(() => store.getters['loginModule/getUserMenus']) || [] // 路由菜单
@@ -17,6 +20,11 @@ const handleMenuItemClick = (routeInfo: IRouterBaseType) => {
   })
 }
 
+// 根据当前 地址栏的路由 匹配 菜单栏的高亮
+const currentRoute = route.path
+const menu = pathMapToMenu(userMenus.value, currentRoute)
+const defaultValue = ref(String(menu?.id))
+
 </script>
 
 <template>
@@ -26,6 +34,7 @@ const handleMenuItemClick = (routeInfo: IRouterBaseType) => {
       <span v-if="!props.collapse" class="title">Vue3+TS</span>
     </div>
     <el-menu
+      :default-active="defaultValue"
       :collapse="props.collapse"
       class="el-menu-vertical"
       background-color="#0c2135"
@@ -35,13 +44,13 @@ const handleMenuItemClick = (routeInfo: IRouterBaseType) => {
       <template v-for="item in userMenus" :key="item.id">
         <!--        二级菜单-->
         <template v-if="item.type === 1">
-          <el-sub-menu :index="String(item.sort)">
+          <el-sub-menu :index="String(item.id)">
             <template #title>
               <component v-if="item.icon" :is="randomCreateIcon()" class="icon-class"></component>
               <span>{{ item.name }}</span>
             </template>
             <template v-for="child in item.children" :key="child.id">
-              <el-menu-item :index="String(child.sort)" @click="handleMenuItemClick(child)">
+              <el-menu-item :index="String(child.id)" @click="handleMenuItemClick(child)">
                 <component v-if="child.icon" :is="randomCreateIcon()" class="icon-class"></component>
                 <span>{{ child.name }}</span>
               </el-menu-item>

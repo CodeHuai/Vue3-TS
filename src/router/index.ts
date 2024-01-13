@@ -1,5 +1,7 @@
 import { createRouter, RouteRecordRaw, createWebHashHistory } from 'vue-router'
 import cache from '@/utils/cache'
+import { firstMenu } from '@/utils/map-menus'
+import { ElMessage } from 'element-plus'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -8,12 +10,12 @@ const routes: Array<RouteRecordRaw> = [
   },
   {
     path: '/login',
-    name:'login',
+    name: 'login',
     component: () => import('@/views/login/login.vue')
   },
   {
     path: '/main',
-    name:'main',
+    name: 'main',
     component: () => import('@/views/main/main.vue')
   },
   {
@@ -29,15 +31,22 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  if (to.path !== '/login') {
-    if (!cache.getCache('token')) {
-      cache.clearCache()
-      return '/login'
-    }
-    next()
-  } else {
+  // 只要没有 token 都是需要重新登陆
+  if (!cache.getCache('token')) {
+    ElMessage.error('请重新登陆！')
     cache.clearCache()
-    next()
+    return '/login'
+  } else {
+    if (to.path !== '/login') {
+      if(to.path === '/main'){
+        return firstMenu.url
+      } else {
+        next()
+      }
+    } else if (to.path === '/login') {
+      cache.clearCache()
+      next()
+    }
   }
 })
 
