@@ -22,7 +22,7 @@ const handleFoldChange = (status:boolean) => {
         <el-main class="page-content">
           <router-view v-slot="{Component}">
             <transition>
-              <component :is="Component" class="animate__zoomIn animate__animated"></component>
+              <component :is="Component" class="animate__zoomIn animate__animated page-center"></component>
             </transition>
           </router-view>
         </el-main>
@@ -47,6 +47,11 @@ const handleFoldChange = (status:boolean) => {
 
 .page-content {
   height: calc(100% - 48px);
+
+  .page-center{
+    background: #ffffff;
+    border-radius: 5px;
+  }
 }
 
 .el-header,
