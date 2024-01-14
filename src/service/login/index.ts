@@ -1,5 +1,6 @@
 import network from '@/service'
-import type { IAccount, IDataType, ILoginType } from './types'
+import type { IAccount, ILoginType } from './types'
+import type {IDataType} from '../types'
 
 
 // 登陆

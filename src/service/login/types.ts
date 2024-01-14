@@ -8,8 +8,3 @@ export interface ILoginType {
   name: string
   id: number
 }
-
-export interface IDataType<T = any> {
-  code: number
-  data: T
-}

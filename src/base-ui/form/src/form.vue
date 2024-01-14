@@ -1,8 +1,14 @@
 <script setup lang="ts">
-import type {IFormItem} from '../types/index'
-import type {PropType} from 'vue'
+import type { IFormItem } from '../types/index'
+import { PropType, ref, watch } from 'vue'
+
+const emits = defineEmits(['update:modelValue'])
 
 const props = defineProps({
+  modelValue: {
+    type: Object,
+    require: true
+  },
   labelWidth: {
     type: String,
     default: '100px'
@@ -26,10 +32,27 @@ const props = defineProps({
     default: () => ({ padding: '10px 40px' })
   }
 })
+
+
+// 处理 formData
+// const formData = computed({
+//   set: () => {
+//     emits('update:modelValue', formData)
+//   },
+//   get: ()=> ({...props.modelValue})
+// })
+
+const formData = ref({ ...props.modelValue })
+watch(() => formData, (newValue) => {
+  emits('update:modelValue', newValue)
+}, { deep: true })
 </script>
 
 <template>
   <div class="hy-form">
+    <div class="header">
+      <slot name="header"></slot>
+    </div>
     <el-form :label-width="props.labelWidth">
       <el-row>
         <template v-for="item in props.formItems" :key="item.label">
@@ -43,6 +66,7 @@ const props = defineProps({
                 v-if="item.type === 'input' || item.type === 'password'"
               >
                 <el-input
+                  v-model="formData[`${item.field}`]"
                   :placeholder="item.placeholder"
                   v-bind="item.otherOptions"
                   :show-password="item.type === 'password'"
@@ -50,6 +74,7 @@ const props = defineProps({
               </template>
               <template v-else-if="item.type === 'select'">
                 <el-select
+                  v-model="formData[`${item.field}`]"
                   :placeholder="item.placeholder"
                   v-bind="item.otherOptions"
                   style="width: 100%"
@@ -65,6 +90,7 @@ const props = defineProps({
               </template>
               <template v-else-if="item.type === 'datepicker'">
                 <el-date-picker
+                  v-model="formData[`${item.field}`]"
                   style="width: 100%"
                   v-bind="item.otherOptions"
                 ></el-date-picker>
@@ -74,6 +100,9 @@ const props = defineProps({
         </template>
       </el-row>
     </el-form>
+    <div class="footer">
+      <slot name="footer"></slot>
+    </div>
   </div>
 </template>
 
