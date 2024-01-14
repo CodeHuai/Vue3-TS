@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { IFormItem } from '../types/index'
-import { PropType, ref, watch } from 'vue'
+import { PropType, ref, watch, computed } from 'vue'
 
 const emits = defineEmits(['update:modelValue'])
 
