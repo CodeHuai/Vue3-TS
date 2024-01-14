@@ -7,24 +7,28 @@ const props = defineProps({
   contentTableConfig: {
     type: Object,
     require: true
+  },
+  pageName: {
+    type: String,
+    require: true
   }
 })
 
 const store = useStore()
 store.dispatch('systemModule/getPageListAction', {
-  pageUrl: '/users/list',
+  pageName: props.pageName,
   queryInfo: {
     offset: 0,
     size: 10
   }
 })
-const userList = computed(() => store.getters['systemModule/getUserList']) || []
+const dataList = computed(() => store.getters['systemModule/pageListData'](props.pageName))
 // const userCount = computed(() => store.getters['systemModule/getUserCount']) || 0
 </script>
 
 <template>
   <div class="page-content">
-    <BaseTable v-bind="contentTableConfig" :list-data="userList">
+    <BaseTable v-bind="contentTableConfig" :list-data="dataList">
       <template #headerHandler>
         <el-button type="primary">新建用户</el-button>
       </template>
