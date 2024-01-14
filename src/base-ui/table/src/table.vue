@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { pathMapToMenu } from '@/utils/map-menus'
 import { useStore } from 'vuex'
-import { computed, reactive, ref } from 'vue'
+import { computed, ref } from 'vue'
 import { useRoute } from 'vue-router'
 
 const emits = defineEmits(['selectionChange'])
