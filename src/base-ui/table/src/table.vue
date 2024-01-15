@@ -48,7 +48,7 @@ const onSelectChange = (selection: any) => {
 
 // 每页数量改变时
 const handleSizeChange = (pageSize: number) => {
-  emits('update:page', {...props.page, pageSize})
+  emits('update:page', {pageSize, currentPage: 1})
 }
 
 // 当前页改变时
@@ -82,7 +82,7 @@ const handleCurrentChange = (currentPage: number) => {
         width="80"
       ></el-table-column>
       <template v-for="propItem in props.propList" :key="propItem.prop">
-        <el-table-column v-bind="propItem" align="center">
+        <el-table-column v-bind="propItem" align="center" show-overflow-tooltip>
           <template #default="scope">
             <slot :name="propItem.slotName" :row="scope.row">
               {{ scope.row[propItem.prop] }}

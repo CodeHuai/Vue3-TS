@@ -8,6 +8,7 @@ export function usePageSearch() {
     pageContentRef.value?.fetchUserData()
   }
   const handleQueryClick = (queryInfo: any) => {
+    pageContentRef.value.reset()
     pageContentRef.value?.fetchUserData(queryInfo)
   }
 

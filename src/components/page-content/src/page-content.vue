@@ -43,6 +43,18 @@ const echoSearcgParams = (info: any) => {
   copySearchInfo = info
 }
 
+
+// 动态插槽处理
+const otherPropSlots = props.contentTableConfig?.propList.filter(
+  (item: any) => {
+    if (item.slotName === 'status') return false
+    if (item.slotName === 'createAt') return false
+    if (item.slotName === 'updateAt') return false
+    if (item.slotName === 'handler') return false
+    return true
+  }
+)
+
 watch(pageInfo, () => {
   // 想办法拿到 queryInfo
   fetchUserData(copySearchInfo)
@@ -81,6 +93,16 @@ defineExpose({
           <el-button icon="Edit" size="small" type="primary"></el-button>
           <el-button icon="Delete" size="small" type="danger"></el-button>
         </div>
+      </template>
+      <!-- 在page-content中动态插入剩余的插槽 -->
+      <template
+        v-for="item in otherPropSlots"
+        :key="item.prop"
+        #[item.slotName]="scope"
+      >
+        <template v-if="item.slotName">
+          <slot :name="item.slotName" :row="scope.row"></slot>
+        </template>
       </template>
     </BaseTable>
   </div>
