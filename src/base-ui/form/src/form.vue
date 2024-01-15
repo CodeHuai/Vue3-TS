@@ -43,7 +43,8 @@ const props = defineProps({
 // })
 
 const formData = ref({ ...props.modelValue })
-watch(() => formData, (newValue) => {
+
+watch(formData , (newValue) => {
   emits('update:modelValue', newValue)
 }, { deep: true })
 </script>
