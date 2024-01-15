@@ -4,13 +4,21 @@ import { useStore } from 'vuex'
 import { computed, ref } from 'vue'
 import { useRoute } from 'vue-router'
 
-const emits = defineEmits(['selectionChange'])
+const emits = defineEmits(['selectionChange', 'update:page'])
 const store = useStore()
 const route = useRoute()
 const menus = computed(() => store.getters['loginModule/getUserMenus'])
 const currentMenu = pathMapToMenu(menus.value, route.path)
 
 const props = defineProps({
+  page: {
+    required: true,
+    default: () => ({ currentPage: 1, pageSize: 10 })
+  },
+  listCount: {
+    required: true,
+    default: 0
+  },
   title: {
     type: String
   },
@@ -39,16 +47,14 @@ const onSelectChange = (selection: any) => {
 }
 
 // 每页数量改变时
-const handleSizeChange = () => {
-
+const handleSizeChange = (pageSize: number) => {
+  emits('update:page', {...props.page, pageSize})
 }
 
 // 当前页改变时
-const handleCurrentChange = () => [
-
-]
-
-const currentPage = ref(1)
+const handleCurrentChange = (currentPage: number) => {
+  emits('update:page', { ...props.page, currentPage })
+}
 </script>
 
 <template>
@@ -90,11 +96,11 @@ const currentPage = ref(1)
         <el-pagination
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
-          :current-page="currentPage"
-          :page-sizes="[100, 200, 300, 400]"
-          :page-size="100"
+          :current-page="page.currentPage"
+          :page-sizes="[10, 20, 30, 50, 100]"
+          :page-size="page.pageSize"
           layout="total, sizes, prev, pager, next, jumper"
-          :total="400"
+          :total="listCount"
         >
         </el-pagination>
       </slot>

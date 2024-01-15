@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, onMounted, reactive, ref, watch } from 'vue'
 import { useStore } from 'vuex'
 import BaseTable from '@/base-ui/table/index'
 
@@ -15,20 +15,53 @@ const props = defineProps({
 })
 
 const store = useStore()
-store.dispatch('systemModule/getPageListAction', {
-  pageName: props.pageName,
-  queryInfo: {
-    offset: 0,
-    size: 10
-  }
-})
+// 处理分压器
+const pageInfo = ref({ currentPage: 1, pageSize: 10 })
+let copySearchInfo = reactive({})
+// 置空分页器
+const reset = () => {
+  copySearchInfo = {}
+  pageInfo.value.currentPage = 1
+  pageInfo.value.pageSize = 10
+}
+// 查询表格数据
+const fetchUserData = (queryInfo = {}) => {
+  store.dispatch('systemModule/getPageListAction', {
+    pageName: props.pageName,
+    queryInfo: {
+      offset: (pageInfo.value.currentPage - 1) ? (pageInfo.value.currentPage - 1) * pageInfo.value.pageSize : 0,
+      size: pageInfo.value.pageSize,
+      ...queryInfo
+    }
+  })
+}
 const dataList = computed(() => store.getters['systemModule/pageListData'](props.pageName))
-// const userCount = computed(() => store.getters['systemModule/getUserCount']) || 0
+const dataCount = computed(() => store.getters['systemModule/pageListCount'](props.pageName))
+
+
+const echoSearcgParams = (info: any) => {
+  copySearchInfo = info
+}
+
+watch(pageInfo, () => {
+  // 想办法拿到 queryInfo
+  fetchUserData(copySearchInfo)
+})
+
+onMounted(() => {
+  fetchUserData()
+})
+
+defineExpose({
+  reset,
+  fetchUserData,
+  echoSearcgParams
+})
 </script>
 
 <template>
   <div class="page-content">
-    <BaseTable v-bind="contentTableConfig" :list-data="dataList">
+    <BaseTable v-bind="contentTableConfig" :list-data="dataList" :listCount="dataCount" v-model:page="pageInfo">
       <template #headerHandler>
         <el-button type="primary">新建用户</el-button>
       </template>
