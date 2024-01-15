@@ -4,7 +4,7 @@ import type { IRootState } from '../types'
 import { fetchLoginByAccount, requestUserInfoById, requestUserMenusByRoleId } from '@/service/login/index'
 import cache from '@/utils/cache'
 import router from '@/router'
-import { mapMenusToRoutes } from '@/utils/map-menus'
+import { mapMenusToRoutes, mapMenusToPermissions } from '@/utils/map-menus'
 
 
 const loginModule: Module<ILoginState, IRootState> = {
@@ -13,15 +13,19 @@ const loginModule: Module<ILoginState, IRootState> = {
     return {
       token: '',
       userInfo: {},
-      userMenus: []
+      userMenus: [],
+      permissions: []
     }
   },
   getters: {
     getUserMenus(state) {
       return state.userMenus || cache.getCache('userMenus')
     },
-    getUserInfo(state){
+    getUserInfo(state) {
       return state.userInfo
+    },
+    getUserPermisions(state){
+      return state.permissions || []
     }
   },
   actions: {
@@ -53,6 +57,7 @@ const loginModule: Module<ILoginState, IRootState> = {
     phoneLoginAction({ commit }, payload) {
       console.log('手机号', payload)
     },
+    // 处理刷新时的操作，避免 store 中的数据丢失
     loadLocalLogin({ commit }) {
       const token = cache.getCache('token')
       if (token) {
@@ -85,6 +90,10 @@ const loginModule: Module<ILoginState, IRootState> = {
       routes.forEach((route) => {
         router.addRoute('main', route)
       })
+
+      //   将权限信息存到 store 中
+      const permissions = mapMenusToPermissions(value)
+      state.permissions = permissions
     }
   }
 }

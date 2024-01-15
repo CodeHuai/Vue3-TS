@@ -18,4 +18,5 @@ export interface ILoginState {
   token: string
   userInfo: any
   userMenus: Array<IRootRouterType>
+  permissions: Array<string>
 }

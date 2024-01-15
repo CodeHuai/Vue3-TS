@@ -2,15 +2,17 @@
 import { computed, onMounted, reactive, ref, watch } from 'vue'
 import { useStore } from 'vuex'
 import BaseTable from '@/base-ui/table/index'
+import { usePermission } from '@/hooks/use-permission'
+import { ElMessage } from 'element-plus'
 
 const props = defineProps({
   contentTableConfig: {
     type: Object,
-    require: true
+    required: true
   },
   pageName: {
     type: String,
-    require: true
+    required: true
   }
 })
 
@@ -18,6 +20,10 @@ const store = useStore()
 // 处理分压器
 const pageInfo = ref({ currentPage: 1, pageSize: 10 })
 let copySearchInfo = reactive({})
+const isCreate = usePermission(props?.pageName, 'create')
+const isUpdate = usePermission(props?.pageName, 'update')
+const isDelete = usePermission(props?.pageName, 'delete')
+const isQuery = usePermission(props?.pageName, 'query')
 // 置空分页器
 const reset = () => {
   copySearchInfo = {}
@@ -26,6 +32,10 @@ const reset = () => {
 }
 // 查询表格数据
 const fetchUserData = (queryInfo = {}) => {
+  if (!isQuery) {
+    ElMessage.error('当前用户没有权限喔~')
+    return
+  }
   store.dispatch('systemModule/getPageListAction', {
     pageName: props.pageName,
     queryInfo: {
@@ -75,7 +85,7 @@ defineExpose({
   <div class="page-content">
     <BaseTable v-bind="contentTableConfig" :list-data="dataList" :listCount="dataCount" v-model:page="pageInfo">
       <template #headerHandler>
-        <el-button type="primary">新建用户</el-button>
+        <el-button v-if="isCreate" type="primary" size="medium">新建</el-button>
       </template>
 
       <template #status="scope">
@@ -90,8 +100,8 @@ defineExpose({
       </template>
       <template #handler="scope">
         <div class="handle-btns">
-          <el-button icon="Edit" size="small" type="primary"></el-button>
-          <el-button icon="Delete" size="small" type="danger"></el-button>
+          <el-button v-if="isUpdate" icon="Edit" size="small" type="primary"></el-button>
+          <el-button v-if="isDelete" icon="Delete" size="small" type="danger"></el-button>
         </div>
       </template>
       <!-- 在page-content中动态插入剩余的插槽 -->
