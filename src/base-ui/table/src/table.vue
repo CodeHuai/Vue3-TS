@@ -11,6 +11,14 @@ const menus = computed(() => store.getters['loginModule/getUserMenus'])
 const currentMenu = pathMapToMenu(menus.value, route.path)
 
 const props = defineProps({
+  showFooter: {
+    type: Boolean,
+    default: true
+  },
+  childrenProps: {
+    type: Object,
+    default: () => ({})
+  },
   page: {
     required: true,
     default: () => ({ currentPage: 1, pageSize: 10 })
@@ -48,7 +56,7 @@ const onSelectChange = (selection: any) => {
 
 // 每页数量改变时
 const handleSizeChange = (pageSize: number) => {
-  emits('update:page', {pageSize, currentPage: 1})
+  emits('update:page', { pageSize, currentPage: 1 })
 }
 
 // 当前页改变时
@@ -67,7 +75,8 @@ const handleCurrentChange = (currentPage: number) => {
         </div>
       </slot>
     </div>
-    <el-table :data="props.listData" @selection-change="onSelectChange" border style="width: 100%">
+    <el-table v-bind="childrenProps" :data="props.listData" @selection-change="onSelectChange" border
+              style="width: 100%">
       <el-table-column
         v-if="showSelectColumn"
         type="selection"
@@ -82,7 +91,7 @@ const handleCurrentChange = (currentPage: number) => {
         width="80"
       ></el-table-column>
       <template v-for="propItem in props.propList" :key="propItem.prop">
-        <el-table-column v-bind="propItem" align="center" show-overflow-tooltip>
+        <el-table-column v-bind="propItem" align="center" :show-overflow-tooltip="propItem.slotName !== 'handler'">
           <template #default="scope">
             <slot :name="propItem.slotName" :row="scope.row">
               {{ scope.row[propItem.prop] }}
@@ -91,7 +100,7 @@ const handleCurrentChange = (currentPage: number) => {
         </el-table-column>
       </template>
     </el-table>
-    <div class="footer">
+    <div class="footer" v-if="showFooter">
       <slot name="footer">
         <el-pagination
           @size-change="handleSizeChange"
