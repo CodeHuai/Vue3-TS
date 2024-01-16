@@ -12,7 +12,7 @@ import { globalRegister } from './global'
 
 store.dispatch('loginModule/loadLocalLogin') // 用户信息的持久化 vuex
 // 拿到 角色数据和职位数据
-store.dispatch('getInitialDataAction')
+// store.dispatch('getInitialDataAction')
 
 
 const app = createApp(App)

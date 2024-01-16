@@ -8,7 +8,6 @@ import { useRoute } from 'vue-router'
 import { IBreadcrumb } from '@/base-ui/breadcrumb/types/index'
 
 const store = useStore()
-const route = useRoute()
 const isFold = ref(false)
 const emits = defineEmits(['foldChange'])
 const handleFoldClick = () => {

@@ -24,17 +24,20 @@ const loginModule: Module<ILoginState, IRootState> = {
     getUserInfo(state) {
       return state.userInfo
     },
-    getUserPermisions(state){
+    getUserPermisions(state) {
       return state.permissions || []
     }
   },
   actions: {
-    async accountLoginAction({ commit }, payload) {
+    async accountLoginAction({ commit, dispatch }, payload) {
       try {
         const { data } = await fetchLoginByAccount(payload)
         const { token, name, id } = data
         // 存储 token
         commit('changeToken', token)
+
+        // 拿到 角色数据和职位数据
+        dispatch('getInitialDataAction', null, { root: true })
 
         //   处理用户信息
         const result = await requestUserInfoById(id)
@@ -58,11 +61,13 @@ const loginModule: Module<ILoginState, IRootState> = {
       console.log('手机号', payload)
     },
     // 处理刷新时的操作，避免 store 中的数据丢失
-    loadLocalLogin({ commit }) {
+    loadLocalLogin({ commit, dispatch }) {
       const token = cache.getCache('token')
       if (token) {
         commit('changeToken', token)
       }
+      // 拿到 角色数据和职位数据
+      dispatch('getInitialDataAction', null, { root: true })
       const userInfo = cache.getCache('userInfo')
       if (userInfo) {
         commit('changeUserInfo', userInfo)

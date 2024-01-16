@@ -2,10 +2,19 @@
 import { useStore } from 'vuex'
 import { computed } from 'vue'
 import user from '@/router/main/system/user/user'
+import cache from '@/utils/cache'
+import { useRouter } from 'vue-router'
 
 const store = useStore()
+const router = useRouter()
 const userInfo = computed(() => store.getters['loginModule/getUserInfo'])
 const name = computed(() => userInfo.value.name) || ''
+
+
+const handleExitClick = () => {
+  cache.deleteCache('token')
+  router.push('/main')
+}
 </script>
 
 <template>
@@ -20,7 +29,7 @@ const name = computed(() => userInfo.value.name) || ''
       </span>
       <template #dropdown>
         <el-dropdown-menu>
-          <el-dropdown-item>退出登录</el-dropdown-item>
+          <el-dropdown-item @click="handleExitClick">退出登录</el-dropdown-item>
           <el-dropdown-item>用户信息</el-dropdown-item>
           <el-dropdown-item>系统管理</el-dropdown-item>
         </el-dropdown-menu>
