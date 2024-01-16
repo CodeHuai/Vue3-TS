@@ -5,6 +5,10 @@ import { useStore } from 'vuex'
 
 const store = useStore()
 const props = defineProps({
+  otherInfo: {
+    type: Object,
+    default: () => ({})
+  },
   modalConfig: {
     type: Object,
     required: true
@@ -36,14 +40,14 @@ const handleConfirmClick = () => {
     // 编辑
     store.dispatch('systemModule/editPageDataAction', {
       pageName: props.pageName,
-      editData: { ...formData.value },
+      editData: { ...formData.value, ...props.otherInfo},
       id: props.defaultInfo.id
     })
   } else {
     // 新建
     store.dispatch('systemModule/createPageDataAction', {
       pageName: props.pageName,
-      newData: { ...formData.value }
+      newData: { ...formData.value, ...props.otherInfo }
     })
   }
 }
@@ -75,6 +79,7 @@ defineExpose({
       destroy-on-close
     >
       <BaseForm v-bind="modalConfig" v-model="formData"></BaseForm>
+      <slot></slot>
       <template #footer>
         <span class="dialog-footer">
           <el-button @click="dialogVisible = false">取 消</el-button>
