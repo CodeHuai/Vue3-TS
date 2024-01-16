@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import BaseForm from '@/base-ui/form/index'
+import { useStore } from 'vuex'
 
+const store = useStore()
 const props = defineProps({
   modalConfig: {
     type: Object,
@@ -30,6 +32,20 @@ const changeVisiable = (status: boolean) => {
 // 取消按钮
 const handleConfirmClick = () => {
   changeVisiable(false)
+  if (Object.keys(props.defaultInfo).length) {
+    // 编辑
+    store.dispatch('systemModule/editPageDataAction', {
+      pageName: props.pageName,
+      editData: { ...formData.value },
+      id: props.defaultInfo.id
+    })
+  } else {
+    // 新建
+    store.dispatch('systemModule/createPageDataAction', {
+      pageName: props.pageName,
+      newData: { ...formData.value }
+    })
+  }
 }
 
 watch(

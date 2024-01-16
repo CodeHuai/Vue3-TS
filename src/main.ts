@@ -1,7 +1,7 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
-import store from './store'
+import {store} from './store'
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
@@ -11,6 +11,8 @@ import {registerIcon} from '@/config/index'
 import { globalRegister } from './global'
 
 store.dispatch('loginModule/loadLocalLogin') // 用户信息的持久化 vuex
+// 拿到 角色数据和职位数据
+store.dispatch('getInitialDataAction')
 
 
 const app = createApp(App)
