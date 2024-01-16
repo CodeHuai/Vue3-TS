@@ -90,6 +90,10 @@ class Request {
   put<T>(config: RequestConfig) {
     return this.request<T>({ ...config, method: 'put' })
   }
+
+  patch<T>(config: RequestConfig){
+    return this.request<T>({ ...config, method: 'patch' })
+  }
 }
 
 
