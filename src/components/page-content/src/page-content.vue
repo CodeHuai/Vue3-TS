@@ -16,6 +16,8 @@ const props = defineProps({
   }
 })
 
+const emits = defineEmits(['editBtnClick', 'newBtnClick'])
+
 const store = useStore()
 // 处理分压器
 const pageInfo = ref({ currentPage: 1, pageSize: 10 })
@@ -61,6 +63,13 @@ const handleDeleteClick = (item: any) => {
   })
 }
 
+const handleNewClick = () => {
+  emits('newBtnClick')
+}
+const handleEditClick = (item: any) => {
+  emits('editBtnClick', item)
+}
+
 
 // 动态插槽处理
 const otherPropSlots = props.contentTableConfig?.propList.filter(
@@ -93,7 +102,7 @@ defineExpose({
   <div class="page-content">
     <BaseTable v-bind="contentTableConfig" :list-data="dataList" :listCount="dataCount" v-model:page="pageInfo">
       <template #headerHandler>
-        <el-button v-if="isCreate" type="primary">新建</el-button>
+        <el-button v-if="isCreate" type="primary" @click="handleNewClick">新建</el-button>
       </template>
 
       <template #status="scope">
@@ -108,7 +117,7 @@ defineExpose({
       </template>
       <template #handler="scope">
         <div class="handle-btns">
-          <el-button v-if="isUpdate" size="small" type="primary">编辑</el-button>
+          <el-button v-if="isUpdate" size="small" type="primary" @click="handleEditClick(scope.row)">编辑</el-button>
           <el-button v-if="isDelete" size="small" type="danger" @click="handleDeleteClick(scope.row)">删除</el-button>
         </div>
       </template>
